@@ -43,6 +43,10 @@ args = parser.parse_args()
 
 
 if __name__ == "__main__":
+    
+    torch.cuda.init()
+    torch.cuda.set_device(0)
+    
     if not args.deterministic:
         cudnn.benchmark = True
         cudnn.deterministic = False

@@ -24,8 +24,8 @@ parser.add_argument('--num_classes', type=int,
 parser.add_argument('--list_dir', type=str,
                     default='./lists/lists_Synapse', help='list dir')
 
-parser.add_argument('--max_iterations', type=int,default=20000, help='maximum epoch number to train')
-parser.add_argument('--max_epochs', type=int, default=30, help='maximum epoch number to train')
+parser.add_argument('--max_iterations', type=int,default=2000, help='maximum epoch number to train')
+parser.add_argument('--max_epochs', type=int, default=150, help='maximum epoch number to train')
 parser.add_argument('--batch_size', type=int, default=24,
                     help='batch_size per gpu')
 parser.add_argument('--img_size', type=int, default=224, help='input patch size of network input')
@@ -65,7 +65,9 @@ def inference(args, model, test_save_path=None):
 
 
 if __name__ == "__main__":
-
+    torch.cuda.init()
+    torch.cuda.set_device(0)
+    
     if not args.deterministic:
         cudnn.benchmark = True
         cudnn.deterministic = False
@@ -129,12 +131,12 @@ if __name__ == "__main__":
     logging.info(str(args))
     logging.info(snapshot_name)
 
-    if args.is_savenii:
-        args.test_save_dir = '../predictions'
-        test_save_path = os.path.join(args.test_save_dir, args.exp, snapshot_name)
-        os.makedirs(test_save_path, exist_ok=True)
-    else:
-        test_save_path = None
+    #if args.is_savenii:
+    args.test_save_dir = '../predictions'
+    test_save_path = os.path.join(args.test_save_dir, args.exp, snapshot_name)
+    os.makedirs(test_save_path, exist_ok=True)
+    #else:
+    #   test_save_path = None
     inference(args, net, test_save_path)
 
 
